@@ -28,6 +28,11 @@ let Persons = [
 
 app.get("/api/persons", (req, res) => {
   res.json(Persons)
+});
+
+app.get("/info",(req, res) => {
+  const totalPerson = Persons.length;
+  res.send(`<p> Phone book has info for ${totalPerson} people </p> <br/> <div> ${new Date}`)
 })
 
 
