@@ -1,4 +1,5 @@
 const { response } = require("express");
+const cors = reqiure("cors");
 const express = require("express");
 const morgan = require("morgan");
 morgan.token("data", (request) => {
@@ -6,6 +7,7 @@ morgan.token("data", (request) => {
 })
 const app = express();
 app.use(express.json());
+app.use(cors())
 const PORT = 4000;
 
 const requestLogger = (request,response,next) => {
