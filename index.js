@@ -1,5 +1,5 @@
 const { response } = require("express");
-const cors = reqiure("cors");
+const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 morgan.token("data", (request) => {
