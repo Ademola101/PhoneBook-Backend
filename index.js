@@ -8,6 +8,7 @@ morgan.token("data", (request) => {
 const app = express();
 app.use(express.json());
 app.use(cors())
+app.use(express.static("build"))
 const PORT =process.env.PORT || 4000;
 
 const requestLogger = (request,response,next) => {
