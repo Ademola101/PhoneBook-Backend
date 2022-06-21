@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "deploy": "git push heroku main",
     "dev": "nodemon index.js"
   },
@@ -13,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "mongoose": "^6.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
