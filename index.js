@@ -1,8 +1,11 @@
-const { response } = require("express");
+
 const express = require("express");
 const app = express()
+const cors = require('cors')
+
+app.use(cors())
 app.use(express.json())
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 let notes = [
   {
@@ -60,10 +63,10 @@ app.delete("/api/notes/:id", (req, res) => {
 });
 
 app.post("/api/notes", (req,res) => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map(note => note.id)) : 0
+  
   const body = req.body
   if(!body.content) {
-    return response.status(400).json({error: "content missing"})
+    return res.status(400).json({error: "content missing"})
   }
 
 const note = {
