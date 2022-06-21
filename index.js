@@ -26,6 +26,11 @@ let Persons = [
   }
 ];
 
+
+const getRandom = () => {
+  return Math.floor(Math.random() * (100 - 1) + 1 )
+}
+
 app.get("/api/persons", (req, res) => {
   res.json(Persons)
 });
@@ -33,6 +38,47 @@ app.get("/api/persons", (req, res) => {
 app.get("/info",(req, res) => {
   const totalPerson = Persons.length;
   res.send(`<p> Phone book has info for ${totalPerson} people </p> <br/> <div> ${new Date}`)
+});
+
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = Persons.find(person => person.id === id)
+  if(person) {
+    res.json(person)
+  }
+else {
+res.status(404).end()
+}
+});
+
+app.delete("/api/persons/:id", (req,res) => {
+  const id  = Number(req.params.id);
+  Persons = Persons.filter(person => person.id !== id)
+res.status(204).end()
+});
+
+app.post("/api/persons", (req, res) => {
+const body = req.body;
+const phoneNumbers =  Persons.map(person => person.number)
+console.log(phoneNumbers);
+if(!body.name){
+  return res.status(400).json({error: "name is missing"})
+}
+if(!body.number){
+  return res.status(400).json({error: "number is missing"})
+}
+
+if (phoneNumbers.filter(number => number === body.number).length > 0 ){
+  return res.status(400).json({error: "Number already added"})
+}
+
+const newPerson = {
+  name: body.name,
+  number: body.number,
+  id: getRandom()
+};
+Persons = Persons.concat(newPerson);
+res.json(newPerson)
 })
 
 
