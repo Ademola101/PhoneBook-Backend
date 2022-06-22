@@ -1,6 +1,7 @@
-const { response } = require("express");
+require('dotenv').config()
 const cors = require("cors");
 const express = require("express");
+const PhoneBook = require("./models/Phoneboook")
 const morgan = require("morgan");
 morgan.token("data", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : ""
@@ -49,7 +50,9 @@ const getRandom = () => {
 }
 
 app.get("/api/persons", (req, res) => {
-  res.json(Persons)
+  PhoneBook.find({}).then(result => {
+    res.json(result)
+  })
 });
 
 app.get("/info",(req, res) => {
