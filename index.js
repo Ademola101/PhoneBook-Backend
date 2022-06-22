@@ -9,6 +9,21 @@ morgan.token("data", (request) => {
 const app = express();
 app.use(express.static("build"))
 app.use(express.json());
+const errorHandler = (error,request, response, next) => {
+  console.log(error.message);
+  if (error === "CastError") {
+return response.status(400).send({
+  error: "malformatted id"
+});
+
+
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 app.use(cors())
 
 const PORT =process.env.PORT || 4000;
@@ -21,29 +36,6 @@ next()
 };
 
 app.use(requestLogger)
-
-let Persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-];
 
 
 const getRandom = () => {
