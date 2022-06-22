@@ -1,15 +1,16 @@
 require('dotenv').config()
 const cors = require("cors");
 const express = require("express");
-const PhoneBook = require("./models/Phoneboook")
+const PhoneBook = require("./models/Phonebook")
 const morgan = require("morgan");
 morgan.token("data", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : ""
 })
 const app = express();
+app.use(express.static("build"))
 app.use(express.json());
 app.use(cors())
-app.use(express.static("build"))
+
 const PORT =process.env.PORT || 4000;
 
 const requestLogger = (request,response,next) => {
@@ -71,10 +72,14 @@ res.status(404).end()
 }
 });
 
-app.delete("/api/persons/:id", (req,res) => {
-  const id  = Number(req.params.id);
-  Persons = Persons.filter(person => person.id !== id)
-res.status(204).end()
+app.delete("/api/persons/:id", (req,res,next) => {
+  // const id  = Number(req.params.id);
+  // Persons = Persons.filter(person => person.id !== id)
+// res.status(204).end()
+
+PhoneBook.findByIdAndRemove(req.params.id).then(result => {
+  res.status(204).end()
+}).catch(error => next(error))
 });
 
 app.post("/api/persons", (req, res) => {
@@ -92,13 +97,13 @@ if (phoneNumbers.filter(number => number === body.number).length > 0 ){
   return res.status(400).json({error: "Number already added"})
 }
 
-const newPerson = {
+const newPerson = new PhoneBook({
   name: body.name,
-  number: body.number,
-  id: getRandom()
-};
-Persons = Persons.concat(newPerson);
-res.json(newPerson)
+  number: body.number
+})
+newPerson.save().then(savedPerson => {
+  res.json(savedPerson)
+})
 })
 
 const unknownEndPoint = (request, response) => {
