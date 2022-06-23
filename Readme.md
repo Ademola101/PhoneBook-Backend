@@ -9,7 +9,6 @@ Backend design of phone [PhoneBook](https://github.com/Ademola101/PhoneBook/) ap
   
   <https://salty-plateau-41961.herokuapp.com/api/persons>
 
-
 ## Built With
 
 * NodeJS
