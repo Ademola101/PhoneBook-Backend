@@ -21,6 +21,10 @@ return response.status(400).send({
 
   }
 
+  else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })}
+  
+
   next(error)
 }
 
@@ -82,28 +86,18 @@ PhoneBook.findByIdAndRemove(req.params.id).then(result => {
 }).catch(error => next(error))
 });
 
-app.post("/api/persons", (req, res) => {
-const body = req.body;
-const phoneNumbers =  Persons.map(person => person.number)
-console.log(phoneNumbers);
-if(!body.name){
-  return res.status(400).json({error: "name is missing"})
-}
-if(!body.number){
-  return res.status(400).json({error: "number is missing"})
-}
-
-if (phoneNumbers.filter(number => number === body.number).length > 0 ){
-  return res.status(400).json({error: "Number already added"})
-}
+app.post("/api/persons", (req, res,next) => {
+const {name, number} = req.body;
+// const phoneNumbers =  Persons.map(person => person.number)
+// console.log(phoneNumbers);
 
 const newPerson = new PhoneBook({
-  name: body.name,
-  number: body.number
+  name,
+  number
 })
 newPerson.save().then(savedPerson => {
   res.json(savedPerson)
-})
+}).catch(error => next(error))
 })
 
 app.put("/api/persons/:id", (req, res,next) => {
