@@ -19,13 +19,22 @@ const Note = mongoose.model("Note", noteSchema);
 
 mongoose.connect(url).then(result => {
   console.log("connected");
-  const note = new Note({
-    content: "werey ni e",
-    date: new Date,
-    important: false
-  })
-  return note.save()
-}).then((result) => {
-  console.log(`note saved`);
-  return mongoose.connection.close()
-}).catch((err) => console.log(err))
+  // const note = new Note({
+    // content: "werey ni e",
+    // date: new Date,
+    // important: false
+  // })
+  // return note.save()
+// }).then((result) => {
+  // console.log(`note saved`);
+  // return mongoose.connection.close()
+  // }).catch((err) => console.log(err)
+
+Note.find({}).then(results => {
+  results.forEach(result => {
+    console.log(result);
+  });
+  mongoose.connection.close()
+})
+
+})
