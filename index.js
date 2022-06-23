@@ -32,7 +32,7 @@ app.use(errorHandler)
 
 app.use(cors())
 
-const PORT =process.env.PORT || 4000
+const PORT =process.env.PORT || 3005
 
 const requestLogger = (request,response,next) => {
   console.log('Method: ', request.method)
