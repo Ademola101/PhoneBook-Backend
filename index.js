@@ -9,6 +9,8 @@ morgan.token("data", (request) => {
 const app = express();
 app.use(express.static("build"))
 app.use(express.json());
+
+
 const errorHandler = (error,request, response, next) => {
   console.log(error.message);
   if (error === "CastError") {
@@ -48,20 +50,26 @@ app.get("/api/persons", (req, res) => {
   })
 });
 
-app.get("/info",(req, res) => {
-  const totalPerson = Persons.length;
-  res.send(`<p> Phone book has info for ${totalPerson} people </p> <br/> <div> ${new Date}`)
+app.get("/info",(req, res,next) => {
+  PhoneBook.find({}).then(persons => {
+    res.send(`<p> Phone book has info for ${persons.length} people </p> <br/> <div> ${new Date}`)
+  }).catch(error => next(error))
+  
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = Persons.find(person => person.id === id)
-  if(person) {
-    res.json(person)
-  }
-else {
-res.status(404).end()
-}
+app.get("/api/persons/:id", (req, res,next) => {
+  // const id = Number(req.params.id);
+  // const person = Persons.find(person => person.id === id)
+  PhoneBook.findById(req.params.id).then(person => {
+    if(person) {
+      res.json(person)
+    }
+    else {
+      res.status(404).end()
+      }
+  }).catch(error => next(error))
+  
+
 });
 
 app.delete("/api/persons/:id", (req,res,next) => {
@@ -98,6 +106,17 @@ newPerson.save().then(savedPerson => {
 })
 })
 
+app.put("/api/persons/:id", (req, res,next) => {
+  const body = req.body;
+  const person = {
+    name: body.name,
+    number: body.number
+  };
+
+  PhoneBook.findByIdAndUpdate(req.params.id, person, {new:true}).then(updatedPhoneBook => {
+res.json(updatedPhoneBook)
+  }).catch(error => next(error))
+})
 const unknownEndPoint = (request, response) => {
   response.status(404).send({error: "unknown endpoint"})
 };
