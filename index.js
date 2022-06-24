@@ -81,7 +81,7 @@ app.delete('/api/persons/:id', (req,res,next) => {
   // Persons = Persons.filter(person => person.id !== id)
 // res.status(204).end()
 
-  PhoneBook.findByIdAndRemove(req.params.id).then(result => {
+  PhoneBook.findByIdAndRemove(req.params.id).then(() => {
     res.status(204).end()
   }).catch(error => next(error))
 })

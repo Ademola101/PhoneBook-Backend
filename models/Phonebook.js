@@ -38,7 +38,6 @@ const PhonebookSchema = new Schema({
     type: Number,
     required: [true, 'number is required'],
     minLength: 8,
-    validate: numberValidator
   }
 })
 
