@@ -19,7 +19,7 @@ const numberValidator = [{
     return true
 
   },
-  msg: 'must be at least 8 digit'
+  msg: 'must be at least 8 digit',
 },
 {
 
@@ -27,7 +27,7 @@ const numberValidator = [{
     return /^\d{2,3}-\d+$/.test(number)
   },
 
-  mesg: 'invalid phone number' }
+  meg: 'invalid phone number' },
 ]
 const PhonebookSchema = new Schema({
   name: {
